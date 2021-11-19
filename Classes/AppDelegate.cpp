@@ -1,5 +1,4 @@
 
-
 #include "AppDelegate.h"
 #include "Classes\MenuScene.h"
 
@@ -68,7 +67,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
         director->setOpenGLView(glview);
     }
 
-    // turn on display FPS
+    // turn off display FPS
     director->setDisplayStats(false);
 
     // set FPS. the default value is 1.0/60 if you don't call this
