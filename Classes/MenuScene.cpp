@@ -32,7 +32,8 @@ bool MenuScene::init()
     auto playMenuItem = MenuItemImage::create("StartButton.png", "StartButton.png", CC_CALLBACK_1(MenuScene::GoToChooseLevelGameScene, this));
     playMenuItem->setScale(0.7f);
 
-    auto settingsMenuItem = MenuItemImage::create("SettingsButton.png", "SettingsButton.png", CC_CALLBACK_1(MenuScene::GoToSettingsScene, this));
+    auto settingsMenuItem = MenuItemImage::create("SettingButton.png", "SettingButton.png", CC_CALLBACK_1(MenuScene::GoToSettingsScene, this));
+    settingsMenuItem->setScale(0.5f);
 
     auto menuItems = Menu::create(exitMenuItem, playMenuItem, settingsMenuItem, NULL);
     

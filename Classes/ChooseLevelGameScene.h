@@ -18,6 +18,7 @@ private:
     void GoToFirstLevelGameScene(Ref* pSender);
     void GoToSecondLevelGameScene(Ref* pSender);
     void GoToThirdLevelGameScene(Ref* pSender);
+    void GoToMenuScene(Ref* pSender);
 };
 
 #endif // __MENU_SCENE_H__

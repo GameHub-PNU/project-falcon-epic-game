@@ -1,5 +1,5 @@
 #include "SettingsScene.h"
-
+#include "MenuScene.h"
 
 USING_NS_CC;
 
@@ -26,5 +26,20 @@ bool SettingsScene::init()
         return false;
     }
 
+    auto backToMenuItem = MenuItemImage::create("Back.png", "Back.png", CC_CALLBACK_1(SettingsScene::GoToMenuScene, this));
+    auto exitMenu = Menu::create(backToMenuItem, NULL);
+    exitMenu->setScale(0.3);
+    exitMenu->setAnchorPoint(Vec2(0, 0));
+    exitMenu->setPosition(Vec2(65, 725));
+
+
+    this->addChild(exitMenu);
+
+
     return true;
+}
+
+void SettingsScene::GoToMenuScene(Ref* pSender) {
+    auto scene = MenuScene::createScene();
+    Director::getInstance()->replaceScene(TransitionCrossFade::create(0.5, scene));
 }
