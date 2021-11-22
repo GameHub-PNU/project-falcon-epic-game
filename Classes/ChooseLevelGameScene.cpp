@@ -47,7 +47,7 @@ bool ChooseLevelGameScene::init()
 
 void ChooseLevelGameScene::GoToFirstLevelGameScene(Ref* pSender) {
     auto scene = FirstLevelGameScene::createScene();
-    Director::getInstance()->replaceScene(scene);
+    Director::getInstance()->replaceScene(TransitionFade::create(1.5f, scene));
 }
 
 void ChooseLevelGameScene::GoToSecondLevelGameScene(Ref* pSender) {
@@ -63,5 +63,5 @@ void ChooseLevelGameScene::GoToThirdLevelGameScene(Ref* pSender) {
 
 void ChooseLevelGameScene::GoToMenuScene(Ref* pSender) {
     auto scene = MenuScene::createScene();
-    Director::getInstance()->replaceScene(TransitionCrossFade::create(0.5,scene));
+    Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene));
 }

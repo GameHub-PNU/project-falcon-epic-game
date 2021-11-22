@@ -12,6 +12,8 @@ public:
 
     // implement the "static create()" method manually
     CREATE_FUNC(SettingsScene);
+private:
+
     void GoToMenuScene(Ref* pSender);
 
 };

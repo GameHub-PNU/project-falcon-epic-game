@@ -25,7 +25,7 @@ bool MenuScene::init()
     this->addChild(background_sprite);
 
     auto exitMenuItem = MenuItemImage::create("EXIT.png", "EXIT.png", CC_CALLBACK_0(MenuScene::ExitFromGame, this));
-    exitMenuItem->setScale(0.25f);
+    exitMenuItem->setScale(0.5f);
     /*exitButton->setPosition(Vec2(exitButton->getContentSize().width * exitButton->getScaleX() / 2.0f + OFFSET,
         Director::getInstance()->getWinSize().height - exitButton->getContentSize().height * exitButton->getScaleX() / 2.0f - OFFSET));*/
 
@@ -50,13 +50,13 @@ bool MenuScene::init()
 void MenuScene::GoToChooseLevelGameScene(Ref* pSender)
 {
     auto scene = ChooseLevelGameScene::createScene();
-	Director::getInstance()->replaceScene(TransitionFade::create(0.5, scene));
+	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene));
 }
 
 void MenuScene::GoToSettingsScene(Ref* pSender)
 {
     auto scene = SettingsScene::createScene();
-    Director::getInstance()->replaceScene(TransitionCrossFade::create(0.5, scene));
+    Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene));
 }
 
 void MenuScene::ExitFromGame()

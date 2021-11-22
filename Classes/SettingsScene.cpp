@@ -41,5 +41,5 @@ bool SettingsScene::init()
 
 void SettingsScene::GoToMenuScene(Ref* pSender) {
     auto scene = MenuScene::createScene();
-    Director::getInstance()->replaceScene(TransitionCrossFade::create(0.5, scene));
+    Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene));
 }
