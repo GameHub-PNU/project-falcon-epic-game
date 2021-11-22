@@ -27,7 +27,7 @@ bool FirstLevelGameScene::init()
     {
         return false;
     }
-
+    srand(time(NULL));
     background_sprite->setPosition(0.0f, Director::getInstance()->getWinSize().height / 2.0f);
     background_sprite->setAnchorPoint(Vec2(0.0f, 0.5f));
     this->addChild(background_sprite);
@@ -40,6 +40,47 @@ bool FirstLevelGameScene::init()
 
 	plane_sprite->runAction(start_motion);
     background_sprite->runAction(Sequence::create(DelayTime::create(3.0f), CallFunc::create(CC_CALLBACK_0(FirstLevelGameScene::init_listener, this)), background_motion, nullptr));
+
+
+    float center = Director::getInstance()->getWinSize().height / 2;
+    int height = Director::getInstance()->getWinSize().height;
+    for (float x = Director::getInstance()->getWinSize().width; x < 4096; ) {
+        int a =1 + rand() % 5;
+        switch (a)
+        {
+        case 1: 
+            startedCoordinates.push_back(Vec2(x,  (float)(abs(rand()%(int)(height-center))+center)));
+            break;
+
+        case 2:
+            startedCoordinates.push_back(Vec2(x, 45 + rand() % (int)center));
+            break;
+        case 3:
+            startedCoordinates.push_back(Vec2(x, center));
+            break;
+        case 4:
+            startedCoordinates.push_back(Vec2(x, (float)(abs(rand() % (int)(height - center)) + center)));
+            startedCoordinates.push_back(Vec2(x, center));
+            break;
+        case 5:
+            startedCoordinates.push_back(Vec2(x, center));
+            startedCoordinates.push_back(Vec2(x, 45 + rand() % (int)center));
+        case 6:
+            startedCoordinates.push_back(Vec2(x, (float)(abs(rand() % (int)(height - center)) + center)));
+            startedCoordinates.push_back(Vec2(x, 45 + rand() % (int)center));
+            break;
+        default:
+            break;
+        }
+        x += 250;
+    }
+    for (int i = 0; i < startedCoordinates.size(); i++) {
+        auto cloud = Sprite::create("Cloud.png");
+        clouds.push_back(cloud);
+        clouds[i]->setPosition(startedCoordinates[i]);
+        this->addChild(clouds[i]);
+    }
+
 
 	this->scheduleUpdate();
     return true;
@@ -57,6 +98,9 @@ void FirstLevelGameScene::update(float delta)
         {
             plane_sprite->setPosition(plane_sprite->getPositionX(), plane_sprite->getPositionY() - 2.0f);
         }
+    }
+    for (int i = 0; i < clouds.size(); i++) {
+        clouds[i]->setPosition(Vec2(clouds[i]->getPositionX() - 1, clouds[i]->getPositionY()));
     }
 }
 

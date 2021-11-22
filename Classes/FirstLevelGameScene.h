@@ -5,6 +5,7 @@
 
 #include "cocos2d.h"
 
+
 class FirstLevelGameScene : public cocos2d::Scene
 {
 public:
@@ -23,7 +24,8 @@ private:
     bool isUp = false;
     bool isDown = false;
     bool isGameStarted = false;
-
+    std::vector<cocos2d::Vec2> startedCoordinates;
+    std::vector<cocos2d::Sprite*> clouds;
     void GoToPauseScene(Ref* pSender);
     void onMouseDown(cocos2d::EventMouse* event);
     void onMouseUp(cocos2d::EventMouse* event);
