@@ -3,6 +3,8 @@
 #include "SecondLevelGameScene.h"
 #include "ThirdLevelGameScene.h"
 #include "MenuScene.h"
+#include "AudioEngine.h"
+#include "SettingsHandler.h"
 
 USING_NS_CC;
 
@@ -46,6 +48,7 @@ bool ChooseLevelGameScene::init()
 }
 
 void ChooseLevelGameScene::GoToFirstLevelGameScene(Ref* pSender) {
+    experimental::AudioEngine::stop(SettingsHandler::getCurrentAudioId());
     auto scene = FirstLevelGameScene::createScene();
     Director::getInstance()->replaceScene(TransitionFade::create(1.5f, scene));
 }

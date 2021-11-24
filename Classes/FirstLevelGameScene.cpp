@@ -82,6 +82,8 @@ bool FirstLevelGameScene::init()
     }
 
 
+
+
 	this->scheduleUpdate();
     return true;
 }
@@ -92,10 +94,12 @@ void FirstLevelGameScene::update(float delta)
     {
         if (isUp)
         {
+           if(plane_sprite->getPositionY()+plane_sprite->getContentSize().height/2<Director::getInstance()->getWinSize().height)
             plane_sprite->setPosition(plane_sprite->getPositionX(), plane_sprite->getPositionY() + 2.0f);
         }
         else
         {
+            if (plane_sprite->getPositionY() - plane_sprite->getContentSize().height / 2 >0)
             plane_sprite->setPosition(plane_sprite->getPositionX(), plane_sprite->getPositionY() - 2.0f);
         }
     }
