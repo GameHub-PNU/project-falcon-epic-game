@@ -104,8 +104,14 @@ void FirstLevelGameScene::update(float delta)
         }
     }
     for (int i = 0; i < clouds.size(); i++) {
-        clouds[i]->setPosition(Vec2(clouds[i]->getPositionX() - 1, clouds[i]->getPositionY()));
+        float x = clouds[i]->getPositionX();
+        float y = clouds[i]->getPositionY();
+        clouds[i]->setPosition(Vec2(x - 1, y));
+        if (x < -40) {
+            clouds[i]->setPosition(startedCoordinates[i]);
+        }
     }
+
 }
 
 void FirstLevelGameScene::GoToPauseScene(Ref* pSender) {

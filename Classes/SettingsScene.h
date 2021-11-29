@@ -2,6 +2,7 @@
 #define __SETTINGS_SCENE_H__
 
 #include "cocos2d.h"
+#include <ui/CocosGUI.h>
 
 class SettingsScene : public cocos2d::Scene
 {
@@ -15,7 +16,7 @@ public:
 private:
 
     void GoToMenuScene(Ref* pSender);
-
+    void buttonClick(Ref* pSender, cocos2d::ui::Slider::EventType type);
 };
 
 #endif // __THIRD_LEVEL_GAME_SCENE_H__
