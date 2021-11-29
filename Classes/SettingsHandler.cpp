@@ -2,7 +2,7 @@
 #include "AudioEngine.h"
 #include "cocos2d.h"
 
-float SettingsHandler::soundVolume = 0.1f;
+float SettingsHandler::soundVolume = 0.5f;
 int SettingsHandler::currentAudioId = 0;
 float SettingsHandler::getSoundVolume() {
 	return soundVolume;

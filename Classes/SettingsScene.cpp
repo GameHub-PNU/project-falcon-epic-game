@@ -1,6 +1,8 @@
 #include "SettingsScene.h"
 #include "MenuScene.h"
 #include <ui/CocosGUI.h>
+#include <SettingsHandler.h>
+#include "AudioEngine.h"
 
 USING_NS_CC;
 
@@ -45,12 +47,17 @@ bool SettingsScene::init()
     slider->setScale(2.0);
     slider->setPosition(Vec2(Director::getInstance()->getWinSize().width / 2, Director::getInstance()->getWinSize().height / 2));
 
+    slider->setPercent(SettingsHandler::getSoundVolume()*100);
+
     this->addChild(slider);
     
-    slider->addEventListener(CC_CALLBACK_2(SettingsScene::buttonClick, this));
+    slider->addEventListener(CC_CALLBACK_2(SettingsScene::changeVolume, this));
 
 
+    volumeName->setPosition(Director::getInstance()->getWinSize().width / 2.0f, (Director::getInstance()->getWinSize().height / 2.0f)+100);
 
+    volumeName->enableShadow(Color4B::BLACK, Size(5, -5), 2);
+    this->addChild(volumeName);
 
     this->addChild(exitMenu);
 
@@ -58,11 +65,14 @@ bool SettingsScene::init()
     return true;
 }
 
-void SettingsScene::buttonClick(Ref* pSender, ui::Slider::EventType type)
+void SettingsScene::changeVolume(Ref* pSender, ui::Slider::EventType type)
 {
     auto slider = dynamic_cast<ui::Slider*>(pSender);
     if (type == ui::Slider::EventType::ON_PERCENTAGE_CHANGED) {
-        //fly->setScale(slider->getPercent() / 10 + 1);
+        
+        SettingsHandler::setSoundVolume((float)slider->getPercent() / 100);
+       // CCLOG("%f", SettingsHandler::getSoundVolume());
+        experimental::AudioEngine::setVolume(SettingsHandler::getCurrentAudioId(), SettingsHandler::getSoundVolume());
     }
 
 };
