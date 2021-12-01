@@ -3,7 +3,7 @@
 #include "cocos2d.h"
 
 float SettingsHandler::soundVolume = 0.5f;
-int SettingsHandler::currentAudioId = 0;
+int SettingsHandler::currentAudioId = -1;
 float SettingsHandler::getSoundVolume() {
 	return soundVolume;
 }

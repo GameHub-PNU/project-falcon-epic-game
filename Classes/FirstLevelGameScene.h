@@ -19,7 +19,9 @@ public:
 
 private:
     cocos2d::Sprite* plane_sprite = cocos2d::Sprite::create("plane.png");
+    cocos2d::Sprite* cloud = cocos2d::Sprite::create("Cloud.png");
     cocos2d::Sprite* background_sprite = cocos2d::Sprite::create("background-first.png");
+    cocos2d::PhysicsBody* physics_plane;
 
     bool isUp = false;
     bool isDown = false;
@@ -29,6 +31,7 @@ private:
     void GoToPauseScene(Ref* pSender);
     void onMouseDown(cocos2d::EventMouse* event);
     void onMouseUp(cocos2d::EventMouse* event);
+    bool onCollision(cocos2d::PhysicsContact& contact);
 
     void init_listener();
 

@@ -49,10 +49,10 @@ bool MenuScene::init()
     gameName->enableShadow(Color4B::BLACK, Size(5, -5), 2);
 
 
-
-   soundId = experimental::AudioEngine::play2d("sound.mp3", true, SettingsHandler::getSoundVolume());
-   SettingsHandler::setCurrentAudioId(soundId);
-
+    if (soundId != SettingsHandler::getCurrentAudioId()) {
+        soundId = AudioEngine::play2d("sound.mp3", true, SettingsHandler::getSoundVolume());
+        SettingsHandler::setCurrentAudioId(soundId);
+    }
 
 
     this->addChild(gameName);
