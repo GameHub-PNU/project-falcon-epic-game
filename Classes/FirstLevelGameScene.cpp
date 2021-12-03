@@ -6,7 +6,7 @@ USING_NS_CC;
 Scene* FirstLevelGameScene::createScene()
 {
     auto scene = Scene::createWithPhysics();
-    scene -> getPhysicsWorld() -> setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+   scene -> getPhysicsWorld() -> setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     scene -> getPhysicsWorld() -> setGravity(Vec2(0, -100));
     auto layer = FirstLevelGameScene::create();
     scene->addChild(layer);
@@ -31,12 +31,36 @@ bool FirstLevelGameScene::init()
         return false;
     }
     srand(time(NULL));
+    auto animation = Animation::create();
+    animation->addSpriteFrameWithFile("FirstBackgroundAnimation/PlaneCrush1.png");
+    animation->addSpriteFrameWithFile("FirstBackgroundAnimation/PlaneCrush2.png");
+    animation->addSpriteFrameWithFile("FirstBackgroundAnimation/PlaneCrush3.png");
+    animation->addSpriteFrameWithFile("FirstBackgroundAnimation/PlaneCrush4.png");
+    animation->addSpriteFrameWithFile("FirstBackgroundAnimation/PlaneCrush5.png");
+    animation->addSpriteFrameWithFile("FirstBackgroundAnimation/PlaneCrush6.png");
+    animation->setDelayPerUnit(0.25f);
+    animation->setLoops(1);
+    planeCrush = Animate::create(animation);
+
     background_sprite->setPosition(0.0f, Director::getInstance()->getWinSize().height / 2.0f);
     background_sprite->setAnchorPoint(Vec2(0.0f, 0.5f));
     this->addChild(background_sprite);
     
+    std::vector<Vec2> planePolygon;
+    planePolygon.push_back(Vec2(-41, -20));
+    planePolygon.push_back(Vec2(-42, 0));
+    planePolygon.push_back(Vec2(-48, 0));
+    planePolygon.push_back(Vec2(-43, 15));
+    planePolygon.push_back(Vec2(-32, 20));
+    planePolygon.push_back(Vec2(48, 0));
+    planePolygon.push_back(Vec2(17, -14));
+    planePolygon.push_back(Vec2(14, -10));
+    planePolygon.push_back(Vec2(-17, -20));
+
+    
+
     plane_sprite->setPosition(-2.0f * plane_sprite->getContentSize().width, Director::getInstance()->getWinSize().height / 2.0f);
-    physics_plane = PhysicsBody::createBox(Size(plane_sprite -> getContentSize().width,plane_sprite -> getContentSize().height), PhysicsMaterial(45.0f, 0.0f, 0.0f));
+    physics_plane = PhysicsBody::createPolygon(planePolygon.data(),planePolygon.size() ,PhysicsMaterial(45.0f, 0.0f, 0.0f));
     physics_plane -> setDynamic(false);
     physics_plane -> setCollisionBitmask(0x1);
     physics_plane -> setContactTestBitmask(0x1);
@@ -88,13 +112,29 @@ bool FirstLevelGameScene::init()
         default:
             break;
         }
-        x += 100;
+        x += 200;
     }
-    for (int i = 0; i < startedCoordinates.size(); i++) {
+    std::vector<Vec2> cloudPolygon;
+
+    cloudPolygon.push_back(Vec2(-72, -20));
+    cloudPolygon.push_back(Vec2(-72, -12));
+    cloudPolygon.push_back(Vec2(-66, 5));
+    cloudPolygon.push_back(Vec2(-49, 21));
+    cloudPolygon.push_back(Vec2(-19, 32));
+    cloudPolygon.push_back(Vec2(0, 32));
+    cloudPolygon.push_back(Vec2(38, 25));
+    cloudPolygon.push_back(Vec2(72, -4));
+    cloudPolygon.push_back(Vec2(72, -20));
+    cloudPolygon.push_back(Vec2(61, -33));
+    cloudPolygon.push_back(Vec2(-55, -33));
+    cloudPolygon.push_back(Vec2(-66, -30));
+
+        for (int i = 0; i < startedCoordinates.size(); i++) {
         auto sequenceCloud = Sprite::createWithTexture(cloud->getTexture());
-        auto physics_cloud = PhysicsBody::createBox(Size(sequenceCloud -> getContentSize().width,sequenceCloud -> getContentSize().height), PhysicsMaterial(45.0f, 0.0f, 0.0f));
+        auto physics_cloud = PhysicsBody::createPolygon(cloudPolygon.data(),cloudPolygon.size() ,PhysicsMaterial(2000.0f, 0.0f, 0.0f));
         physics_cloud -> setVelocity(Vec2(-0.1f * Director::getInstance() -> getWinSize().width ,0));
         physics_cloud -> setDynamic(true);
+        
         physics_cloud -> setGravityEnable(false);
         physics_cloud -> setCollisionBitmask(0x2);
         physics_cloud -> setContactTestBitmask(0x2);
@@ -111,6 +151,12 @@ bool FirstLevelGameScene::init()
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
 
+    
+
+
+    
+
+    planeCrush->retain();
 	this->scheduleUpdate();
     return true;
 }
@@ -144,6 +190,11 @@ void FirstLevelGameScene::GoToPauseScene(Ref* pSender) {
     Director::getInstance()->pushScene(scene);
 }
 
+void FirstLevelGameScene::CallPause()
+{
+    GoToPauseScene(this);
+}
+
 void FirstLevelGameScene::onMouseDown(EventMouse* event)
 {
     physics_plane -> setDynamic(false);
@@ -161,12 +212,12 @@ void FirstLevelGameScene::onMouseUp(cocos2d::EventMouse* event)
 bool FirstLevelGameScene::onCollision(PhysicsContact& contact) {
     PhysicsBody* bodyA = contact.getShapeA()->getBody();
     PhysicsBody* bodyB = contact.getShapeB()->getBody();
-     
         
     if (((1 == bodyA->getCollisionBitmask()) && (2 == bodyB->getCollisionBitmask())) || ((2 == bodyA->getCollisionBitmask()) && (1 == bodyB->getCollisionBitmask()))) {
         // Програш
-        GoToPauseScene(this);
-        return true;
+        
+        plane_sprite->runAction(Sequence::create(planeCrush, CallFuncN::create(CC_CALLBACK_1(FirstLevelGameScene::GoToPauseScene, this)), nullptr));
+        return false;
     }
 
     

@@ -50,7 +50,7 @@ bool MenuScene::init()
 
 
     if (soundId != SettingsHandler::getCurrentAudioId()) {
-        soundId = AudioEngine::play2d("sound.mp3", true, SettingsHandler::getSoundVolume());
+        soundId = experimental::AudioEngine::play2d("sound.mp3", true, SettingsHandler::getSoundVolume());
         SettingsHandler::setCurrentAudioId(soundId);
     }
 

@@ -29,12 +29,14 @@ private:
     std::vector<cocos2d::Vec2> startedCoordinates;
     std::vector<cocos2d::Sprite*> clouds;
     void GoToPauseScene(Ref* pSender);
+    void CallPause();
     void onMouseDown(cocos2d::EventMouse* event);
     void onMouseUp(cocos2d::EventMouse* event);
     bool onCollision(cocos2d::PhysicsContact& contact);
 
     void init_listener();
 
+    cocos2d::FiniteTimeAction* planeCrush;
 };
 
 #endif // __FIRST_LEVEL_GAME_SCENE_H_
