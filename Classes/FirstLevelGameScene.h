@@ -26,13 +26,17 @@ private:
     bool isUp = false;
     bool isDown = false;
     bool isGameStarted = false;
+    int currentCloudIndex = 0;
+    int sixthSizeOfHeight;
     std::vector<cocos2d::Vec2> startedCoordinates;
     std::vector<cocos2d::Sprite*> clouds;
+    std::vector<cocos2d::Vec2> cloudPolygon;
     void GoToPauseScene(Ref* pSender);
     void CallPause();
     void onMouseDown(cocos2d::EventMouse* event);
     void onMouseUp(cocos2d::EventMouse* event);
     bool onCollision(cocos2d::PhysicsContact& contact);
+    cocos2d::Sprite* createCloud(cocos2d::Vec2 coordinates);
 
     void init_listener();
 

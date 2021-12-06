@@ -6,7 +6,7 @@ USING_NS_CC;
 Scene* FirstLevelGameScene::createScene()
 {
     auto scene = Scene::createWithPhysics();
-   scene -> getPhysicsWorld() -> setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
+    scene -> getPhysicsWorld() -> setDebugDrawMask(PhysicsWorld::DEBUGDRAW_ALL);
     scene -> getPhysicsWorld() -> setGravity(Vec2(0, -100));
     auto layer = FirstLevelGameScene::create();
     scene->addChild(layer);
@@ -20,6 +20,8 @@ void FirstLevelGameScene::init_listener()
     listener->onMouseUp = CC_CALLBACK_1(FirstLevelGameScene::onMouseUp, this);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
     physics_plane -> setDynamic(true);
+    physics_plane -> setAngularVelocity(-0.18f);
+    physics_plane -> setAngularDamping(0.3f);
     isGameStarted = true;
 }
 
@@ -64,10 +66,13 @@ bool FirstLevelGameScene::init()
     physics_plane -> setDynamic(false);
     physics_plane -> setCollisionBitmask(0x1);
     physics_plane -> setContactTestBitmask(0x1);
+    physics_plane -> setMass(300.0f);
     plane_sprite -> setPhysicsBody(physics_plane);
     
     auto wall = Node::create();
-    auto wallBody = PhysicsBody::createEdgeBox(Size(2 * Director::getInstance() -> getVisibleSize().width, Director::getInstance() -> getVisibleSize().height) , PhysicsMaterial(0.1f, 1.0f, 0.0f));
+    auto wallBody = PhysicsBody::createEdgeBox(Size(2 * Director::getInstance() -> getVisibleSize().width, Director::getInstance() -> getVisibleSize().height) , PhysicsMaterial(0.0f, 0.0f, 0.0f));
+    wallBody -> setCollisionBitmask(0x3);
+    wallBody -> setContactTestBitmask(0x3);
     wall->setPhysicsBody(wallBody);
     wall->setPosition(Vec2(Director::getInstance() -> getWinSize().width/2, Director::getInstance() -> getWinSize().height/2));
     addChild(wall);
@@ -82,39 +87,7 @@ bool FirstLevelGameScene::init()
     background_sprite->runAction(Sequence::create(DelayTime::create(3.0f), CallFunc::create(CC_CALLBACK_0(FirstLevelGameScene::init_listener, this)), background_motion, nullptr));
 
 
-    float center = Director::getInstance()->getWinSize().height / 2;
-    int height = Director::getInstance()->getWinSize().height;
-    for (float x = Director::getInstance()->getWinSize().width; x < (4096 - Director::getInstance() -> getWinSize().width); ) {
-        int a =1 + rand() % 5;
-        switch (a)
-        {
-        case 1: 
-            startedCoordinates.push_back(Vec2(x, (float)(abs(rand()%(int)(height-center))+center)));
-            break;
-
-        case 2:
-            startedCoordinates.push_back(Vec2(x, 45 + rand() % (int)center));
-            break;
-        case 3:
-            startedCoordinates.push_back(Vec2(x, center));
-            break;
-        case 4:
-            startedCoordinates.push_back(Vec2(x, (float)(abs(rand() % (int)(height - center)) + center)));
-            startedCoordinates.push_back(Vec2(x, center));
-            break;
-        case 5:
-            startedCoordinates.push_back(Vec2(x, center));
-            startedCoordinates.push_back(Vec2(x, 45 + rand() % (int)center));
-        case 6:
-            startedCoordinates.push_back(Vec2(x, (float)(abs(rand() % (int)(height - center)) + center)));
-            startedCoordinates.push_back(Vec2(x, 45 + rand() % (int)center));
-            break;
-        default:
-            break;
-        }
-        x += 200;
-    }
-    std::vector<Vec2> cloudPolygon;
+    sixthSizeOfHeight = Director::getInstance()->getWinSize().height / 6;
 
     cloudPolygon.push_back(Vec2(-72, -20));
     cloudPolygon.push_back(Vec2(-72, -12));
@@ -129,19 +102,15 @@ bool FirstLevelGameScene::init()
     cloudPolygon.push_back(Vec2(-55, -33));
     cloudPolygon.push_back(Vec2(-66, -30));
 
-        for (int i = 0; i < startedCoordinates.size(); i++) {
-        auto sequenceCloud = Sprite::createWithTexture(cloud->getTexture());
-        auto physics_cloud = PhysicsBody::createPolygon(cloudPolygon.data(),cloudPolygon.size() ,PhysicsMaterial(2000.0f, 0.0f, 0.0f));
-        physics_cloud -> setVelocity(Vec2(-0.1f * Director::getInstance() -> getWinSize().width ,0));
-        physics_cloud -> setDynamic(true);
-        
-        physics_cloud -> setGravityEnable(false);
-        physics_cloud -> setCollisionBitmask(0x2);
-        physics_cloud -> setContactTestBitmask(0x2);
-        sequenceCloud -> setPhysicsBody(physics_cloud);
-        clouds.push_back(sequenceCloud);
-        clouds[i]->setPosition(startedCoordinates[i]);
-        this->addChild(clouds[i]);
+    
+    
+    for (int i = 0; i < Director::getInstance() -> getWinSize().width / cloud -> getContentSize().width; i++) {
+        auto cloud1 = createCloud(Vec2(Director::getInstance()->getWinSize().width + i * cloud -> getContentSize().width, (1 + rand() % 5) * sixthSizeOfHeight));
+        auto cloud2 = createCloud(Vec2(Director::getInstance()->getWinSize().width + i * cloud -> getContentSize().width, (1 + rand() % 5) * sixthSizeOfHeight));
+        clouds.push_back(cloud1);
+        clouds.push_back(cloud2);
+        this->addChild(cloud1);
+        this->addChild(cloud2);
     }
 
 
@@ -150,29 +119,36 @@ bool FirstLevelGameScene::init()
                                                         FirstLevelGameScene::onCollision, this);
     this->getEventDispatcher()->addEventListenerWithSceneGraphPriority(contactListener, this);
 
-
-    
-
-
-    
-
     planeCrush->retain();
 	this->scheduleUpdate();
     return true;
 }
 
+Sprite* FirstLevelGameScene::createCloud(Vec2 coordinates) {
+    auto sequenceCloud = Sprite::createWithTexture(cloud->getTexture());
+    auto physics_cloud = PhysicsBody::createPolygon(cloudPolygon.data(),cloudPolygon.size() ,PhysicsMaterial(2000.0f, 0.0f, 0.0f));
+    physics_cloud -> setVelocity(Vec2(-0.1f * Director::getInstance() -> getWinSize().width ,0));
+    physics_cloud -> setDynamic(true);
+    
+    physics_cloud -> setGravityEnable(false);
+    physics_cloud -> setCollisionBitmask(0x2);
+    physics_cloud -> setContactTestBitmask(0x2);
+    sequenceCloud -> setPhysicsBody(physics_cloud);
+    sequenceCloud -> setPosition(coordinates);
+                                 
+    return sequenceCloud;
+}
+
 void FirstLevelGameScene::update(float delta)
 {
-    if (background_sprite -> getNumberOfRunningActions() > 0) {
-        for (int i = 0; i < clouds.size(); i++) {
-            float x = clouds[i]->getPositionX();
-            float y = clouds[i]->getPositionY();
-            if (x < -40) {
-                clouds[i]->setPosition(startedCoordinates[i]);
+    if (isGameStarted) {
+        if (background_sprite -> getNumberOfRunningActions() > 0) {
+            for (int i = 0; i < clouds.size(); i++) {
+                if (clouds[i]->getPositionX() < 0 - clouds[i] -> getContentSize().width/2) {
+                    clouds[i] -> setPosition(Vec2(Director::getInstance()->getWinSize().width + clouds[i] -> getContentSize().width/2, (1 + rand() % 5) * sixthSizeOfHeight));
+                }
             }
-        }
-    } else {
-        if (isGameStarted) {
+        } else {
             isGameStarted = false;
             for (int i = 0; i < clouds.size(); i++) {
                 clouds[i] -> removeFromParentAndCleanup(true);
@@ -200,6 +176,8 @@ void FirstLevelGameScene::onMouseDown(EventMouse* event)
     physics_plane -> setDynamic(false);
     Director::getInstance() -> getRunningScene() -> getPhysicsWorld() -> setGravity(Vec2(0, 100));
     physics_plane -> setDynamic(true);
+    physics_plane -> setAngularDamping(0.3f);
+    physics_plane -> setAngularVelocity(0.18f);
 }
 
 void FirstLevelGameScene::onMouseUp(cocos2d::EventMouse* event)
@@ -207,6 +185,8 @@ void FirstLevelGameScene::onMouseUp(cocos2d::EventMouse* event)
     physics_plane -> setDynamic(false);
     Director::getInstance() -> getRunningScene() -> getPhysicsWorld() -> setGravity(Vec2(0, -100));
     physics_plane -> setDynamic(true);
+    physics_plane -> setAngularDamping(0.3f);
+    physics_plane -> setAngularVelocity(-0.18f);
 }
 
 bool FirstLevelGameScene::onCollision(PhysicsContact& contact) {
@@ -218,8 +198,10 @@ bool FirstLevelGameScene::onCollision(PhysicsContact& contact) {
         
         plane_sprite->runAction(Sequence::create(planeCrush, CallFuncN::create(CC_CALLBACK_1(FirstLevelGameScene::GoToPauseScene, this)), nullptr));
         return false;
+    } else if (((1 == bodyA->getCollisionBitmask()) && (3 == bodyB->getCollisionBitmask())) || ((3 == bodyA->getCollisionBitmask()) && (1 == bodyB->getCollisionBitmask()))) {
+        physics_plane -> setAngularVelocity(0);
+        return true;
     }
-
     
     return false;
 }
