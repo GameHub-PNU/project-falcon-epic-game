@@ -4,8 +4,6 @@
 #include "AudioEngine.h"
 #include "SettingsHandler.h"
 
-
-
 USING_NS_CC;
 
 Scene* MenuScene::createScene()

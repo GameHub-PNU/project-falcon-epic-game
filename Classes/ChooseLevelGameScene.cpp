@@ -39,7 +39,6 @@ bool ChooseLevelGameScene::init()
     exitMenu->setScale(0.3);
     exitMenu->setAnchorPoint(Vec2(0, 0));
     exitMenu->setPosition(Vec2(65, 725));
-    
 
     this->addChild(exitMenu);
     this->addChild(menuItems);
