@@ -27,7 +27,7 @@ bool SecondLevelGameScene::init()
     {
         return false;
     }
-    CCVideoManager::Instance()->PlayVideo("end1.m4v");
+    /*CCVideoManager::Instance()->PlayVideo("end1.m4v");*/
     return true;
 }
 void SecondLevelGameScene::GoToPauseScene(Ref* pSender) {
