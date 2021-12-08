@@ -1,5 +1,7 @@
 #include "SecondLevelGameScene.h"
-#include"PauseGameScene.h"
+
+#include "CCVideoManager.h"
+#include "PauseGameScene.h"
 
 USING_NS_CC;
 
@@ -25,7 +27,7 @@ bool SecondLevelGameScene::init()
     {
         return false;
     }
-
+    CCVideoManager::Instance()->PlayVideo("end1.m4v");
     return true;
 }
 void SecondLevelGameScene::GoToPauseScene(Ref* pSender) {

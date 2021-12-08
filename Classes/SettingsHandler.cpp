@@ -4,9 +4,11 @@
 
 float SettingsHandler::soundVolume = 0.5f;
 int SettingsHandler::currentAudioId = -1;
+
 float SettingsHandler::getSoundVolume() {
 	return soundVolume;
 }
+
 void SettingsHandler::setSoundVolume(float volume) {
 	soundVolume = volume;
 }
