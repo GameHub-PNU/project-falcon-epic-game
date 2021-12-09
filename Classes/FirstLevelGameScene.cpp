@@ -126,8 +126,8 @@ void FirstLevelGameScene::initLevelProgressBar()
 
 void FirstLevelGameScene::turnOnMusic()
 {
-	int soundId = experimental::AudioEngine::play2d("backgroundSongLevel1.mp3", true, SettingsHandler::getSoundVolume());
-	SettingsHandler::setCurrentAudioId(soundId);
+     soundId = experimental::AudioEngine::play2d("backgroundSongLevel1.mp3", true, SettingsHandler::getSoundVolume());
+	 SettingsHandler::setCurrentAudioId(soundId);
 }
 
 Sprite* FirstLevelGameScene::createCloud(Vec2 coordinates)
@@ -148,13 +148,13 @@ Sprite* FirstLevelGameScene::createCloud(Vec2 coordinates)
 
 void FirstLevelGameScene::goToPauseScene(Ref* pSender)
 {
-	auto scene = PauseGameScene::createScene();
+	auto scene = PauseGameScene::createScene(1);
 	Director::getInstance()->pushScene(scene);
 }
 
 void FirstLevelGameScene::goToGameOverScene(Ref* pSender)
 {
-	auto scene = GameOverScene::createScene(current_percent_ / 36);
+	auto scene = GameOverScene::createScene((current_percent_ / 36+1), 1);
 	Director::getInstance()->replaceScene(scene);
 }
 
@@ -226,6 +226,14 @@ bool FirstLevelGameScene::init()
 	initClouds();
 	addPlaneAndCloudsCollision();
 	initLevelProgressBar();
+
+
+	auto pauseMenuItem = MenuItemImage::create("PauseButton.png", "PauseButton.png", CC_CALLBACK_1(FirstLevelGameScene::goToPauseScene, this));
+	pauseMenuItem->setScale(0.4f);
+	auto onGameItem = Menu::create(pauseMenuItem, NULL);
+	onGameItem->setPosition(Vec2(Director::getInstance()->getWinSize().width -(pauseMenuItem->getContentSize().width*0.3), Director::getInstance()->getWinSize().height - pauseMenuItem->getContentSize().height * 0.3));
+	this->addChild(onGameItem, 6);
+
 
 	this->scheduleUpdate();
 	return true;

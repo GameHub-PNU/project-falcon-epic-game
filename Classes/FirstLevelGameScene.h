@@ -23,6 +23,7 @@ private:
     cocos2d::ui::Slider* level_progress_bar_ = cocos2d::ui::Slider::create();
     int current_percent_ = level_progress_bar_->getPercent();
 
+    int soundId;
     bool isUp = false;
     bool isDown = false;
     bool isGameStarted = false;
