@@ -66,10 +66,19 @@ bool GameOverScene::init()
 
     //У мене не виносилось меню, тому ловіть костиль))
     if (current_progress_ == 100) {
-        auto MenuItems = Menu::create(nextLevelItem,restartMenuItem, exitMenuItem, NULL);
-        MenuItems->alignItemsVerticallyWithPadding(30);
-        this->addChild(MenuItems);
-        roundStatus->setPosition(Director::getInstance()->getWinSize().width / 2.0f, 1.90f * MenuItems->getPosition().y);
+        if (level_status_ != 3) {
+            auto MenuItems = Menu::create(nextLevelItem, restartMenuItem, exitMenuItem, NULL);
+            MenuItems->alignItemsVerticallyWithPadding(30);
+            this->addChild(MenuItems);
+            roundStatus->setPosition(Director::getInstance()->getWinSize().width / 2.0f, 1.90f * MenuItems->getPosition().y);
+        }
+        else {
+            auto MenuItems = Menu::create(restartMenuItem, exitMenuItem, NULL);
+            MenuItems->alignItemsVerticallyWithPadding(30);
+            this->addChild(MenuItems);
+            roundStatus->setPosition(Director::getInstance()->getWinSize().width / 2.0f, 1.90f * MenuItems->getPosition().y);
+        }
+       
     }
     else {
         auto MenuItems = Menu::create(restartMenuItem, exitMenuItem, NULL);
