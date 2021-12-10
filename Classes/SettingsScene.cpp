@@ -22,8 +22,6 @@ Scene* SettingsScene::createScene()
 // on "init" you need to initialize your instance
 bool SettingsScene::init()
 {
-    //////////////////////////////
-    // 1. super init first
     if (!Scene::init())
     {
         return false;
@@ -69,7 +67,6 @@ void SettingsScene::changeVolume(Ref* pSender, ui::Slider::EventType type)
 {
     auto slider = dynamic_cast<ui::Slider*>(pSender);
     if (type == ui::Slider::EventType::ON_PERCENTAGE_CHANGED) {
-        
         SettingsHandler::setSoundVolume((float)slider->getPercent() / 100);
        // CCLOG("%f", SettingsHandler::getSoundVolume());
         experimental::AudioEngine::setVolume(SettingsHandler::getCurrentAudioId(), SettingsHandler::getSoundVolume());

@@ -53,13 +53,15 @@ void ChooseLevelGameScene::GoToFirstLevelGameScene(Ref* pSender) {
 }
 
 void ChooseLevelGameScene::GoToSecondLevelGameScene(Ref* pSender) {
+    experimental::AudioEngine::stop(SettingsHandler::getCurrentAudioId());
     auto scene = SecondLevelGameScene::createScene();
-    Director::getInstance()->replaceScene(scene);
+    Director::getInstance()->replaceScene(TransitionFade::create(1.5f, scene));
 }
 
 void ChooseLevelGameScene::GoToThirdLevelGameScene(Ref* pSender) {
+    experimental::AudioEngine::stop(SettingsHandler::getCurrentAudioId());
     auto scene = ThirdLevelGameScene::createScene();
-    Director::getInstance()->replaceScene(scene);
+    Director::getInstance()->replaceScene(TransitionFade::create(1.5f, scene));
 }
 
 

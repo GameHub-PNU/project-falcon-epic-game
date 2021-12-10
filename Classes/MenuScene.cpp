@@ -46,12 +46,10 @@ bool MenuScene::init()
 
     gameName->enableShadow(Color4B::BLACK, Size(5, -5), 2);
 
-
-    if (soundId != SettingsHandler::getCurrentAudioId()) {
+    if (experimental::AudioEngine::getPlayingAudioCount() == 0) {
         soundId = experimental::AudioEngine::play2d("sound.mp3", true, SettingsHandler::getSoundVolume());
         SettingsHandler::setCurrentAudioId(soundId);
     }
-
 
     this->addChild(gameName);
     return true;
@@ -59,7 +57,6 @@ bool MenuScene::init()
 
 void MenuScene::GoToChooseLevelGameScene(Ref* pSender)
 {
-    
     auto scene = ChooseLevelGameScene::createScene();
 	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene));
 }

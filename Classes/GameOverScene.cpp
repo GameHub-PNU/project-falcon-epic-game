@@ -2,11 +2,10 @@
 #include "CCVideoManager.h"
 #include "AudioEngine.h"
 #include "SettingsHandler.h"
-#include "AudioEngine.h"
 
-#include"FirstLevelGameScene.h"
-#include"SecondLevelGameScene.h"
-#include"ThirdLevelGameScene.h"
+#include "FirstLevelGameScene.h"
+#include "SecondLevelGameScene.h"
+#include "ThirdLevelGameScene.h"
 
 #include "MenuScene.h"
 USING_NS_CC;
@@ -34,12 +33,12 @@ void GameOverScene::checkIfLevelCompleted()
     if (current_progress_ == 100)
     {
         roundStatus->setString("You win!");
-        CCVideoManager::Instance()->PlayVideo("end2.mp4");
+        CCVideoManager::Instance()->PlayVideo("end1.m4v");
+        experimental::AudioEngine::play2d("EndLevelSound.mp3", false, SettingsHandler::getSoundVolume());
     }
     else
     {
         roundStatus->setString("You lose!");
-        //MessageBox("You lose!", "Defeat");
     }
 }
 

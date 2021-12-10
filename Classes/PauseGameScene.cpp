@@ -33,8 +33,6 @@ cocos2d::Scene* PauseGameScene::createScene(int levelStatus)
 // on "init" you need to initialize your instance
 bool PauseGameScene::init()
 {
-    //////////////////////////////
-    // 1. super init first
     if (!Scene::init())
     {
         return false;
@@ -54,13 +52,13 @@ bool PauseGameScene::init()
     MenuItems->alignItemsVerticallyWithPadding(30);
     this->addChild(MenuItems);
 
-
     return true;
 }
 
 void PauseGameScene::ResumeGame(Ref* pSender) {
     /*auto scene = ChooseLevelGameScene::createScene();
     Director::getInstance()->replaceScene(scene);*/
+    experimental::AudioEngine::resumeAll();
     Director::getInstance()->popScene();
 }
 
