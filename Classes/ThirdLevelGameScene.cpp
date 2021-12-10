@@ -173,6 +173,8 @@ Sprite* ThirdLevelGameScene::createCloud(Vec2 coordinates)
 	return sequenceCloud;
 }
 
+
+
 void ThirdLevelGameScene::goToPauseScene(Ref* pSender)
 {
 	experimental::AudioEngine::pauseAll();
@@ -254,6 +256,17 @@ bool ThirdLevelGameScene::init()
 	initClouds();
 	addPlaneAndCloudsCollision();
 	initLevelProgressBar();
+
+	//В попередніх рівнях такого не було, тож в ініті пропишу
+	auto downWall = Sprite::create("Fire.png");
+	auto physic_wall = PhysicsBody::createBox(Size(1024, 30), PhysicsMaterial(2000.0f, 0.0f, 0.0f));
+	physic_wall->setDynamic(false);
+	physic_wall->setGravityEnable(false);
+	physic_wall->setCollisionBitmask(0x2);
+	physic_wall->setContactTestBitmask(0x2);
+	downWall->setPhysicsBody(physic_wall);
+	downWall->setPosition(Vec2(Director::getInstance()->getWinSize().width / 2,-10 ));
+	this->addChild(downWall);
 
 	auto pauseMenuItem = MenuItemImage::create("PauseButton.png", "PauseButton.png", CC_CALLBACK_1(ThirdLevelGameScene::goToPauseScene, this));
 	pauseMenuItem->setScale(0.4f);

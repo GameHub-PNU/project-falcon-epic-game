@@ -60,13 +60,27 @@ bool GameOverScene::init()
     restartMenuItem->setScale(0.6f);
     auto exitMenuItem = MenuItemImage::create("MENU.png", "MENU.png", CC_CALLBACK_1(GameOverScene::GoToMenuScene, this));
     exitMenuItem->setScale(0.6f);
+    auto nextLevelItem = MenuItemImage::create("NEXTLEVEL.png", "NEXTLEVEL.png", CC_CALLBACK_1(GameOverScene::GoToNextLevel, this));
+    nextLevelItem->setScale(0.6f);
 
 
-    auto MenuItems = Menu::create(restartMenuItem, exitMenuItem, NULL);
-    MenuItems->alignItemsVerticallyWithPadding(30);
-    this->addChild(MenuItems);
+    //У мене не виносилось меню, тому ловіть костиль))
+    if (current_progress_ == 100) {
+        auto MenuItems = Menu::create(nextLevelItem,restartMenuItem, exitMenuItem, NULL);
+        MenuItems->alignItemsVerticallyWithPadding(30);
+        this->addChild(MenuItems);
+        roundStatus->setPosition(Director::getInstance()->getWinSize().width / 2.0f, 1.90f * MenuItems->getPosition().y);
+    }
+    else {
+        auto MenuItems = Menu::create(restartMenuItem, exitMenuItem, NULL);
+        MenuItems->alignItemsVerticallyWithPadding(40);
+        this->addChild(MenuItems);
+        roundStatus->setPosition(Director::getInstance()->getWinSize().width / 2.0f, 1.70f * MenuItems->getPosition().y);
+    }
 
-    roundStatus->setPosition(Director::getInstance()->getWinSize().width / 2.0f, 1.70f * MenuItems->getPosition().y);
+    
+
+   
     roundStatus->enableShadow(Color4B::BLACK, Size(5, -5), 2);
     this->addChild(roundStatus);
 
@@ -93,6 +107,18 @@ void GameOverScene::GoToMenuScene(Ref* pSender)
 {
     auto scene = MenuScene::createScene();
     Director::getInstance()->replaceScene(scene);
+}
+
+void GameOverScene::GoToNextLevel(Ref* pSender)
+{
+    if (GameOverScene::level_status_ == 1) {
+        auto scene = SecondLevelGameScene::createScene();
+        Director::getInstance()->replaceScene(scene);
+    }
+    if (GameOverScene::level_status_ == 2) {
+        auto scene = ThirdLevelGameScene::createScene();
+        Director::getInstance()->replaceScene(scene);
+    }
 }
 
 
