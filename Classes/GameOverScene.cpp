@@ -63,8 +63,6 @@ bool GameOverScene::init()
     auto nextLevelItem = MenuItemImage::create("NEXTLEVEL.png", "NEXTLEVEL.png", CC_CALLBACK_1(GameOverScene::GoToNextLevel, this));
     nextLevelItem->setScale(0.6f);
 
-
-    //У мене не виносилось меню, тому ловіть костиль))
     if (current_progress_ == 100) {
         if (level_status_ != 3) {
             auto MenuItems = Menu::create(nextLevelItem, restartMenuItem, exitMenuItem, NULL);
