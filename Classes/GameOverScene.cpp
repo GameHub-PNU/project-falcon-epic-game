@@ -28,6 +28,14 @@ Scene* GameOverScene::createScene(int progress_percent, int levelStatus)
     return createScene();
 }
 
+GameOverScene::~GameOverScene()
+{
+    if (current_progress_ == 100)
+    {
+        CCVideoManager::Instance()->DestroyInstance();
+    }
+}
+
 void GameOverScene::checkIfLevelCompleted()
 {
     if (current_progress_ == 100)
@@ -39,6 +47,7 @@ void GameOverScene::checkIfLevelCompleted()
     else
     {
         roundStatus->setString("You lose!");
+        experimental::AudioEngine::play2d("YouLoseSong.mp3", true, SettingsHandler::getSoundVolume());
     }
 }
 
@@ -51,7 +60,6 @@ bool GameOverScene::init()
     }
     experimental::AudioEngine::stop(SettingsHandler::getCurrentAudioId());
     checkIfLevelCompleted();
-    
 
     background_sprite->setPosition(Director::getInstance()->getWinSize().width / 2.0f, Director::getInstance()->getWinSize().height / 2.0f);
     this->addChild(background_sprite);
@@ -85,9 +93,6 @@ bool GameOverScene::init()
         roundStatus->setPosition(Director::getInstance()->getWinSize().width / 2.0f, 1.70f * MenuItems->getPosition().y);
     }
 
-    
-
-   
     roundStatus->enableShadow(Color4B::BLACK, Size(5, -5), 2);
     this->addChild(roundStatus);
 
@@ -96,6 +101,7 @@ bool GameOverScene::init()
 
 void GameOverScene::RestartGame(Ref* pSender)
 {
+    experimental::AudioEngine::stopAll();
     if (GameOverScene::level_status_ == 1) {
         auto scene = FirstLevelGameScene::createScene();
         Director::getInstance()->replaceScene(scene);
@@ -112,6 +118,7 @@ void GameOverScene::RestartGame(Ref* pSender)
 
 void GameOverScene::GoToMenuScene(Ref* pSender)
 {
+    experimental::AudioEngine::stopAll();
     auto scene = MenuScene::createScene();
     Director::getInstance()->replaceScene(scene);
 }

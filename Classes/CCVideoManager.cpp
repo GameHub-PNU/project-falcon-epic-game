@@ -78,10 +78,6 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 	return 0;
 }
 
-
-
-
-
 void CCVideoManager::PlayVideo(std::string path)
 {
 	std::wstring wsTmp(path.begin(), path.end()); //Warning, the conversation between wstring and string only happens correctly if all the characters are single byte (ASCII or ISO-8859-1)
@@ -90,10 +86,10 @@ void CCVideoManager::PlayVideo(std::string path)
 	PCWSTR szTitle = L"BasicPlayback";
 	PCWSTR szWindowClass = L"MFBASICPLAYBACK";
 
-	HWND  mainWindow = CCDirector::getInstance()->getOpenGLView()->getWin32Window();
+	HWND mainWindow = CCDirector::getInstance()->getOpenGLView()->getWin32Window();
 
 	HWND hwnd;
-	WNDCLASSEX wcex = { 0 };
+	WNDCLASSEX wcex = {0 };
 	HINSTANCE hInstance = (HINSTANCE)GetWindowLong(mainWindow, GWL_HINSTANCE);
 
 	//register the windows class
@@ -102,10 +98,7 @@ void CCVideoManager::PlayVideo(std::string path)
 	wcex.hInstance = hInstance;
 	wcex.lpszClassName = szWindowClass;
 
-	if (RegisterClassEx(&wcex) == 0)
-	{
-		return;
-	}
+	RegisterClassEx(&wcex);
 
 	RECT rect;
 	GetClientRect(mainWindow, &rect);

@@ -8,7 +8,7 @@ class GameOverScene : public cocos2d::Scene
 public:
     static cocos2d::Scene* createScene();
     static cocos2d::Scene* createScene(int progress_percent, int levelStatus);
-
+    ~GameOverScene() override;
     virtual bool init();
 
     // implement the "static create()" method manually
