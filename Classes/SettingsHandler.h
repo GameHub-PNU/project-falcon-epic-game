@@ -1,7 +1,4 @@
-
-//#include<cocos2d.h>
-//#include "SimpleAudioEngine.h"
-//using namespace CocosDenshion;
+#pragma once
 
 class SettingsHandler
 {
@@ -13,8 +10,7 @@ public:
 	static int getCurrentAudioId();
 	static void setCurrentAudioId(int t);
 private:
-	static float soundVolume;
-	static int currentAudioId;
-
+	inline static float sound_volume_ = 0.5f;
+	inline static int current_audio_id_ = -1;
 };
 

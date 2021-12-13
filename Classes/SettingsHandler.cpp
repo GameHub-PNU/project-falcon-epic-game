@@ -1,24 +1,19 @@
 #include "SettingsHandler.h"
-#include "AudioEngine.h"
-#include "cocos2d.h"
-
-float SettingsHandler::soundVolume = 0.5f;
-int SettingsHandler::currentAudioId = -1;
 
 float SettingsHandler::getSoundVolume() {
-	return soundVolume;
+	return sound_volume_;
 }
 
 void SettingsHandler::setSoundVolume(float volume) {
-	soundVolume = volume;
+	sound_volume_ = volume;
 }
 
 int SettingsHandler::getCurrentAudioId()
 {
-	return currentAudioId;
+	return current_audio_id_;
 }
 
 void SettingsHandler::setCurrentAudioId(int t)
 {
-	currentAudioId = t;
+	current_audio_id_ = t;
 }

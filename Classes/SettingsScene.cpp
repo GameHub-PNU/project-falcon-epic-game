@@ -16,7 +16,6 @@ Scene* SettingsScene::createScene()
     scene->addChild(layer);
     // return the scene
     return scene;
-
 }
 
 // on "init" you need to initialize your instance
@@ -31,12 +30,11 @@ bool SettingsScene::init()
     background ->setPosition(Director::getInstance()->getWinSize().width / 2.0f, Director::getInstance()->getWinSize().height / 2.0f);
     this->addChild(background);
 
-    auto backToMenuItem = MenuItemImage::create("Back.png", "Back.png", CC_CALLBACK_1(SettingsScene::GoToMenuScene, this));
+    auto backToMenuItem = MenuItemImage::create("Back.png", "Back.png", CC_CALLBACK_1(SettingsScene::goToMenuScene, this));
     auto exitMenu = Menu::create(backToMenuItem, NULL);
-    exitMenu->setScale(0.3);
+    exitMenu->setScale(0.3f);
     exitMenu->setAnchorPoint(Vec2(0, 0));
     exitMenu->setPosition(Vec2(65, 725));
-
 
     auto slider = ui::Slider::create();
     slider->loadBarTexture("ScrollEmpty.png");
@@ -51,14 +49,12 @@ bool SettingsScene::init()
     
     slider->addEventListener(CC_CALLBACK_2(SettingsScene::changeVolume, this));
 
+    volume_name_->setPosition(Director::getInstance()->getWinSize().width / 2.0f, (Director::getInstance()->getWinSize().height / 2.0f)+100);
 
-    volumeName->setPosition(Director::getInstance()->getWinSize().width / 2.0f, (Director::getInstance()->getWinSize().height / 2.0f)+100);
-
-    volumeName->enableShadow(Color4B::BLACK, Size(5, -5), 2);
-    this->addChild(volumeName);
+    volume_name_->enableShadow(Color4B::BLACK, Size(5, -5), 2);
+    this->addChild(volume_name_);
 
     this->addChild(exitMenu);
-
 
     return true;
 }
@@ -74,8 +70,7 @@ void SettingsScene::changeVolume(Ref* pSender, ui::Slider::EventType type)
 
 };
 
-
-void SettingsScene::GoToMenuScene(Ref* pSender) {
+void SettingsScene::goToMenuScene(Ref* pSender) {
     auto scene = MenuScene::createScene();
     Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene));
 }

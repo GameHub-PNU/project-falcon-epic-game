@@ -16,7 +16,6 @@ CCVideoManager* CCVideoManager::Instance()
 	return m_instance;
 }
 
-
 CCVideoManager::CCVideoManager() {}
 
 void CCVideoManager::DestroyInstance()
@@ -119,7 +118,6 @@ void CCVideoManager::PlayVideo(std::string path)
 
 	if (hwnd == 0)
 	{
-
 		return;
 	}
 

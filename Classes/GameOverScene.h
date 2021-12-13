@@ -14,18 +14,17 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(GameOverScene);
 
-    void RestartGame(Ref* pSender);
-    void GoToMenuScene(Ref* pSender);
-    void GoToNextLevel(Ref* pSender);
+    void restartGame(Ref* pSender);
+    void goToMenuScene(Ref* pSender);
+    void goToNextLevel(Ref* pSender);
 
 private:
-    cocos2d::Sprite* background_sprite = cocos2d::Sprite::create("GameOverBackground.png");
-    cocos2d::Label* roundStatus = cocos2d::Label::createWithSystemFont("Status", "Arial Black", 60,
+    cocos2d::Sprite* background_sprite_ = cocos2d::Sprite::create("GameOverBackground.png");
+    cocos2d::Label* round_status_ = cocos2d::Label::createWithSystemFont("Status", "Arial Black", 60,
         cocos2d::Size::ZERO, cocos2d::TextHAlignment::CENTER);
 
-
-    static int current_progress_;
-    static int level_status_;
+    inline static int current_progress_ = 0;
+    inline static int level_status_ = 0;
     void checkIfLevelCompleted();
 
 };

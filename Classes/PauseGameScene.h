@@ -15,13 +15,13 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(PauseGameScene);
 
-    void ResumeGame(Ref* pSender);
-    void RestartGame(Ref* pSender);
-    void GoToMenuScene(Ref* pSender);
+    void resumeGame(Ref* pSender);
+    void restartGame(Ref* pSender);
+    void goToMenuScene(Ref* pSender);
 
 private:
-    cocos2d::Sprite* background_sprite = cocos2d::Sprite::create("PauseBackground.png");
-    static int _levelStatus;
+    cocos2d::Sprite* background_sprite_ = cocos2d::Sprite::create("PauseBackground.png");
+    inline static int level_status_ = 0;
 };
 
 #endif //__PAUSE_GAME_SCENE_H__

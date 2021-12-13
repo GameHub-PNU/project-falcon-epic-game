@@ -28,8 +28,8 @@ void SecondLevelGameScene::addPlaneAnimation()
 	animation->addSpriteFrameWithFile("SecondBackgroundAnimation/PlaneCrush6.png");
 	animation->setDelayPerUnit(0.25f);
 	animation->setLoops(1);
-	planeCrush = Animate::create(animation);
-	planeCrush->retain();
+	plane_crush_ = Animate::create(animation);
+	plane_crush_->retain();
 }
 
 void SecondLevelGameScene::initPlanePhysicsBody()
@@ -37,19 +37,19 @@ void SecondLevelGameScene::initPlanePhysicsBody()
 	std::vector<Vec2> planePolygon = { Vec2(-41, -20), Vec2(-42, 0), Vec2(-48, 0), Vec2(-43, 15),
 		Vec2(-32, 20), Vec2(48, 0), Vec2(17, -14), Vec2(14, -10), Vec2(-17, -20) };
 
-	physics_plane = PhysicsBody::createPolygon(planePolygon.data(), planePolygon.size(), PhysicsMaterial(45.0f, 0.0f, 0.0f));
-	physics_plane->setDynamic(false);
-	physics_plane->setCollisionBitmask(0x1);
-	physics_plane->setContactTestBitmask(0x1);
-	physics_plane->setMass(300.0f);
-	plane_sprite->setPhysicsBody(physics_plane);
+	physics_plane_ = PhysicsBody::createPolygon(planePolygon.data(), planePolygon.size(), PhysicsMaterial(45.0f, 0.0f, 0.0f));
+	physics_plane_->setDynamic(false);
+	physics_plane_->setCollisionBitmask(0x1);
+	physics_plane_->setContactTestBitmask(0x1);
+	physics_plane_->setMass(300.0f);
+	plane_sprite_->setPhysicsBody(physics_plane_);
 }
 
 void SecondLevelGameScene::addBackground()
 {
-	background_sprite->setPosition(0.0f, Director::getInstance()->getWinSize().height / 2.0f);
-	background_sprite->setAnchorPoint(Vec2(0.0f, 0.5f));
-	this->addChild(background_sprite, 1);
+	background_sprite_->setPosition(0.0f, Director::getInstance()->getWinSize().height / 2.0f);
+	background_sprite_->setAnchorPoint(Vec2(0.0f, 0.5f));
+	this->addChild(background_sprite_, 1);
 }
 
 void SecondLevelGameScene::initListener()
@@ -58,10 +58,10 @@ void SecondLevelGameScene::initListener()
 	listener->onMouseDown = CC_CALLBACK_1(SecondLevelGameScene::onMouseDown, this);
 	listener->onMouseUp = CC_CALLBACK_1(SecondLevelGameScene::onMouseUp, this);
 	_eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-	physics_plane->setDynamic(true);
-	physics_plane->setAngularVelocity(-angular_velocity_plane_coeff_);
-	physics_plane->setAngularDamping(angular_damping_plane_coeff_);
-	isGameStarted = true;
+	physics_plane_->setDynamic(true);
+	physics_plane_->setAngularVelocity(-angular_velocity_plane_coeff_);
+	physics_plane_->setAngularDamping(angular_damping_plane_coeff_);
+	is_game_started_ = true;
 }
 
 void SecondLevelGameScene::initGameBound()
@@ -77,20 +77,20 @@ void SecondLevelGameScene::initGameBound()
 
 void SecondLevelGameScene::initPlaneAndBackgroundPosition()
 {
-	plane_sprite->setPosition(-2.0f * plane_sprite->getContentSize().width, Director::getInstance()->getWinSize().height / 2.0f);
-	this->addChild(plane_sprite, 3);
+	plane_sprite_->setPosition(-2.0f * plane_sprite_->getContentSize().width, Director::getInstance()->getWinSize().height / 2.0f);
+	this->addChild(plane_sprite_, 3);
 
-	auto start_motion = MoveTo::create(3.0f, Vec2(Director::getInstance()->getWinSize().width / 9.0f, plane_sprite->getPositionY()));
-	auto background_motion = MoveBy::create(background_movement_time_, -Vec2(background_sprite->getContentSize().width - Director::getInstance()->getWinSize().width, 0.0f));
+	auto start_motion = MoveTo::create(3.0f, Vec2(Director::getInstance()->getWinSize().width / 9.0f, plane_sprite_->getPositionY()));
+	auto background_motion = MoveBy::create(background_movement_time_, -Vec2(background_sprite_->getContentSize().width - Director::getInstance()->getWinSize().width, 0.0f));
 
-	plane_sprite->runAction(start_motion);
-	background_sprite->runAction(Sequence::create(DelayTime::create(1.0f), CallFunc::create(CC_CALLBACK_0(SecondLevelGameScene::turnOnMusic, this)),
+	plane_sprite_->runAction(start_motion);
+	background_sprite_->runAction(Sequence::create(DelayTime::create(1.0f), CallFunc::create(CC_CALLBACK_0(SecondLevelGameScene::turnOnMusic, this)),
 		DelayTime::create(2.0f), CallFunc::create(CC_CALLBACK_0(SecondLevelGameScene::initListener, this)), background_motion, nullptr));
 }
 
 void SecondLevelGameScene::initClouds()
 {
-	cloudPolygons.reserve(5);
+	cloud_polygons_.reserve(5);
 	std::vector<Vec2> first_cloud = { Vec2(-74, 8), Vec2(-54, 18), Vec2(-13, 21), Vec2(3, 36), Vec2(18, 32), Vec2(45, 16), Vec2(49, -6),
 		Vec2(74, -17), Vec2(74, -25),  Vec2(11, -18), Vec2(-3, -13), Vec2(-27, -33), Vec2(-34, -27), Vec2(-44, -33), Vec2(-62, -31),
 		Vec2(-58, -7), Vec2(-50, -3), Vec2(-66, -2) };
@@ -108,19 +108,19 @@ void SecondLevelGameScene::initClouds()
 	std::vector<Vec2> fifth_cloud = { Vec2(-67, -5), Vec2(-37, -11), Vec2(-12, 16), Vec2(10, 19), Vec2(45, 12), Vec2(66, -5), Vec2(66, -14),
 		Vec2(6, -13), Vec2(-53, -17),  Vec2(-68, -14) };
 
-	cloudPolygons.push_back(first_cloud);
-	cloudPolygons.push_back(second_cloud);
-	cloudPolygons.push_back(third_cloud);
-	cloudPolygons.push_back(fourth_cloud);
-	cloudPolygons.push_back(fifth_cloud);
+	cloud_polygons_.push_back(first_cloud);
+	cloud_polygons_.push_back(second_cloud);
+	cloud_polygons_.push_back(third_cloud);
+	cloud_polygons_.push_back(fourth_cloud);
+	cloud_polygons_.push_back(fifth_cloud);
 
 	const int offset = 30;
 	for (int i = 0; i < Director::getInstance()->getWinSize().width / (clouds_sprites_[0]->getContentSize().width + offset); i++) {
 		for (int j = 0; j < clouds_in_column_; ++j)
 		{
 			auto next_cloud = createCloud(Vec2(Director::getInstance()->getWinSize().width + i * (clouds_sprites_[0]->getContentSize().width + offset),
-				rand() % (lines_quantity_ + 1) * eighthSizeOfHeight));
-			clouds.push_back(next_cloud);
+				rand() % (lines_quantity_ + 1) * eighth_size_of_height_));
+			clouds_.push_back(next_cloud);
 			this->addChild(next_cloud, 4);
 		}
 	}
@@ -151,15 +151,15 @@ void SecondLevelGameScene::updateProgressBar(float dt)
 
 void SecondLevelGameScene::turnOnMusic()
 {
-     soundId = experimental::AudioEngine::play2d("backgroundSongLevel2.mp3", true, SettingsHandler::getSoundVolume());
-	 SettingsHandler::setCurrentAudioId(soundId);
+     sound_id_ = experimental::AudioEngine::play2d("backgroundSongLevel2.mp3", true, SettingsHandler::getSoundVolume());
+	 SettingsHandler::setCurrentAudioId(sound_id_);
 }
 
 Sprite* SecondLevelGameScene::createCloud(Vec2 coordinates)
 {
 	int cloud_number = rand() % clouds_sprites_.size();
 	auto sequenceCloud = Sprite::createWithTexture(clouds_sprites_[cloud_number]->getTexture());
-	auto physics_cloud = PhysicsBody::createPolygon(cloudPolygons[cloud_number].data(), cloudPolygons[cloud_number].size(),
+	auto physics_cloud = PhysicsBody::createPolygon(cloud_polygons_[cloud_number].data(), cloud_polygons_[cloud_number].size(),
 		PhysicsMaterial(2000.0f, 0.0f, 0.0f));
 	physics_cloud->setVelocity(Vec2(-0.115f * Director::getInstance()->getWinSize().width, 0));
 	physics_cloud->setDynamic(true);
@@ -188,28 +188,28 @@ void SecondLevelGameScene::goToGameOverScene(Ref* pSender)
 
 void SecondLevelGameScene::onMouseDown(EventMouse* event)
 {
-	physics_plane->setDynamic(false);
+	physics_plane_->setDynamic(false);
 	Director::getInstance()->getRunningScene()->getPhysicsWorld()->setGravity(Vec2(0, 100));
-	physics_plane->setDynamic(true);
-	//physics_plane -> setAngularVelocity(angular_velocity_plane_coeff_);
-	//physics_plane -> setAngularDamping(0.15f);
-	if (plane_sprite->getRotation() > -10) {
-		physics_plane->setAngularDamping((angular_velocity_plane_coeff_ - physics_plane->getAngularVelocity()) * 0.4166f);
-		physics_plane->setAngularVelocity(angular_velocity_plane_coeff_ - physics_plane->getAngularVelocity());
+	physics_plane_->setDynamic(true);
+	//physics_plane_ -> setAngularVelocity(angular_velocity_plane_coeff_);
+	//physics_plane_ -> setAngularDamping(0.15f);
+	if (plane_sprite_->getRotation() > -10) {
+		physics_plane_->setAngularDamping((angular_velocity_plane_coeff_ - physics_plane_->getAngularVelocity()) * 0.4166f);
+		physics_plane_->setAngularVelocity(angular_velocity_plane_coeff_ - physics_plane_->getAngularVelocity());
 	}
 
 }
 
 void SecondLevelGameScene::onMouseUp(EventMouse* event)
 {
-	physics_plane->setDynamic(false);
+	physics_plane_->setDynamic(false);
 	Director::getInstance()->getRunningScene()->getPhysicsWorld()->setGravity(Vec2(0, -100));
-	physics_plane->setDynamic(true);
-	//physics_plane->setAngularVelocity(-angular_velocity_plane_coeff_ - physics_plane->getAngularVelocity());
-	//physics_plane->setAngularDamping(physics_plane->getAngularVelocity() * angular_damping_plane_coeff_ / angular_velocity_plane_coeff_);
-	if (plane_sprite->getRotation() < 10) {
-		physics_plane->setAngularDamping(std::abs((-angular_velocity_plane_coeff_ - physics_plane->getAngularVelocity()) * 0.4166f));
-		physics_plane->setAngularVelocity(-angular_velocity_plane_coeff_ - physics_plane->getAngularVelocity());
+	physics_plane_->setDynamic(true);
+	//physics_plane_->setAngularVelocity(-angular_velocity_plane_coeff_ - physics_plane_->getAngularVelocity());
+	//physics_plane_->setAngularDamping(physics_plane_->getAngularVelocity() * angular_damping_plane_coeff_ / angular_velocity_plane_coeff_);
+	if (plane_sprite_->getRotation() < 10) {
+		physics_plane_->setAngularDamping(std::abs((-angular_velocity_plane_coeff_ - physics_plane_->getAngularVelocity()) * 0.4166f));
+		physics_plane_->setAngularVelocity(-angular_velocity_plane_coeff_ - physics_plane_->getAngularVelocity());
 	}
 
 }
@@ -221,13 +221,16 @@ bool SecondLevelGameScene::onCollision(PhysicsContact& contact)
 
 	if (((1 == bodyA->getCollisionBitmask()) && (2 == bodyB->getCollisionBitmask())) || ((2 == bodyA->getCollisionBitmask()) && (1 == bodyB->getCollisionBitmask())))
 	{
-		// Програш
-		plane_sprite->runAction(Sequence::create(planeCrush, CallFuncN::create(CC_CALLBACK_1(SecondLevelGameScene::goToGameOverScene, this)), nullptr));
+		if (is_game_started_)
+		{
+			plane_sprite_->runAction(Sequence::create(plane_crush_, CallFuncN::create(CC_CALLBACK_1(SecondLevelGameScene::goToGameOverScene, this)), nullptr));
+			is_game_started_ = false;
+		}
 		return false;
 	}
 	if (((1 == bodyA->getCollisionBitmask()) && (3 == bodyB->getCollisionBitmask())) || ((3 == bodyA->getCollisionBitmask()) && (1 == bodyB->getCollisionBitmask())))
 	{
-		physics_plane->setAngularVelocity(0);
+		physics_plane_->setAngularVelocity(0);
 		return true;
 	}
 
@@ -268,31 +271,31 @@ bool SecondLevelGameScene::init()
 
 void SecondLevelGameScene::update(float delta)
 {
-	if (isGameStarted)
+	if (is_game_started_)
 	{
-		if (background_sprite->getNumberOfRunningActions() > 0)
+		if (background_sprite_->getNumberOfRunningActions() > 0)
 		{
-			for (const auto& cloud_to_move : clouds)
+			for (const auto& cloud_to_move : clouds_)
 			{
 				if (cloud_to_move->getPositionX() < 0 - cloud_to_move->getContentSize().width / 2)
 				{
 					cloud_to_move->setPosition(Vec2(Director::getInstance()->getWinSize().width + cloud_to_move->getContentSize().width / 2.0f,
-						rand() % (lines_quantity_ + 1) * eighthSizeOfHeight));
+						rand() % (lines_quantity_ + 1) * eighth_size_of_height_));
 				}
 			}
 		}
 		else
 		{
-			isGameStarted = false;
-			for (const auto& cloud_to_remove : clouds)
+			is_game_started_ = false;
+			for (const auto& cloud_to_remove : clouds_)
 			{
 				cloud_to_remove->removeFromParentAndCleanup(true);
 			}
-			clouds.clear();
-			physics_plane->setDynamic(false);
-			physics_plane->setGravityEnable(false);
-
-			plane_sprite->runAction(Sequence::create(MoveTo::create(3, Vec2(Director::getInstance()->getWinSize().width,
+			clouds_.clear();
+			physics_plane_->setDynamic(false);
+			physics_plane_->setGravityEnable(false);
+			_eventDispatcher->removeAllEventListeners();
+			plane_sprite_->runAction(Sequence::create(MoveTo::create(3, Vec2(Director::getInstance()->getWinSize().width,
 				Director::getInstance()->getWinSize().height / 2.0f)), CallFuncN::create(CC_CALLBACK_1(SecondLevelGameScene::goToGameOverScene, this)), nullptr));
 		}
 	}

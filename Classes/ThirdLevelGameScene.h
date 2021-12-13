@@ -16,19 +16,18 @@ public:
     void update(float delta) override;
 
 private:
-    cocos2d::Sprite* plane_sprite = cocos2d::Sprite::create("plane.png");
+    cocos2d::Sprite* plane_sprite_ = cocos2d::Sprite::create("plane.png");
     std::vector<cocos2d::Sprite*> clouds_sprites_ = { cocos2d::Sprite::create("ThirdLevelClouds/FirstCloud.png"), cocos2d::Sprite::create("ThirdLevelClouds/SecondCloud.png"),
         cocos2d::Sprite::create("ThirdLevelClouds/ThirdCloud.png"), cocos2d::Sprite::create("ThirdLevelClouds/FourthCloud.png"),
         cocos2d::Sprite::create("ThirdLevelClouds/FifthCloud.png") };
-    cocos2d::Sprite* background_sprite = cocos2d::Sprite::create("ThirdBackground.png");
-    cocos2d::PhysicsBody* physics_plane = nullptr;
+    cocos2d::Sprite* background_sprite_ = cocos2d::Sprite::create("ThirdBackground.png");
+    cocos2d::PhysicsBody* physics_plane_ = nullptr;
     cocos2d::ui::Slider* level_progress_bar_ = cocos2d::ui::Slider::create();
     int current_percent_ = level_progress_bar_->getPercent();
-    std::vector<std::vector<cocos2d::Vec2>> cloudPolygons;
+    std::vector<std::vector<cocos2d::Vec2>> cloud_polygons_;
 
-    int soundId;
-    bool isGameStarted = false;
-    int currentCloudIndex = 0;
+    int sound_id_;
+    bool is_game_started_ = false;
     int clouds_in_column_ = 3;
     const int lines_quantity_ = 8;
     const float angular_velocity_plane_coeff_ = 0.18f;
@@ -36,10 +35,11 @@ private:
     const float level_time_duration_in_seconds_ = 207.0f;
     const float background_movement_time_ = 201.0f;
 
-    float eighthSizeOfHeight = cocos2d::Director::getInstance()->getWinSize().height / lines_quantity_;
+    float eighth_size_of_height_ = cocos2d::Director::getInstance()->getWinSize().height / lines_quantity_;
 
-    std::vector<cocos2d::Sprite*> clouds;
-    cocos2d::FiniteTimeAction* planeCrush;
+    std::vector<cocos2d::Sprite*> clouds_;
+    cocos2d::FiniteTimeAction* plane_crush_ = nullptr;
+    cocos2d::FiniteTimeAction* smoke_animation_;
 
     void addPlaneAnimation();
 

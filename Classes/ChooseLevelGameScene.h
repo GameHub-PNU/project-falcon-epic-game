@@ -13,12 +13,12 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(ChooseLevelGameScene);
 private:
-    cocos2d::Sprite* background_sprite = cocos2d::Sprite::create("choose-level-background.png");
+    cocos2d::Sprite* background_sprite_ = cocos2d::Sprite::create("choose-level-background.png");
 
-    void GoToFirstLevelGameScene(Ref* pSender);
-    void GoToSecondLevelGameScene(Ref* pSender);
-    void GoToThirdLevelGameScene(Ref* pSender);
-    void GoToMenuScene(Ref* pSender);
+    void goToFirstLevelGameScene(Ref* pSender);
+    void goToSecondLevelGameScene(Ref* pSender);
+    void goToThirdLevelGameScene(Ref* pSender);
+    void goToMenuScene(Ref* pSender);
 };
 
 #endif // __MENU_SCENE_H__
