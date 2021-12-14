@@ -183,7 +183,7 @@ void SecondLevelGameScene::goToPauseScene(Ref* pSender)
 void SecondLevelGameScene::goToGameOverScene(Ref* pSender)
 {
 	auto scene = GameOverScene::createScene(current_percent_, 2);
-	Director::getInstance()->replaceScene(scene);
+	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene));
 }
 
 void SecondLevelGameScene::onMouseDown(EventMouse* event)

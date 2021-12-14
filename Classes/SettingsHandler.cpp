@@ -17,3 +17,8 @@ void SettingsHandler::setCurrentAudioId(int t)
 {
 	current_audio_id_ = t;
 }
+
+std::vector<int>& SettingsHandler::getMaxProgress()
+{
+	return max_progress_;
+}

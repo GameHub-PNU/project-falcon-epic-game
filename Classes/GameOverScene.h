@@ -14,9 +14,7 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(GameOverScene);
 
-    void restartGame(Ref* pSender);
-    void goToMenuScene(Ref* pSender);
-    void goToNextLevel(Ref* pSender);
+    
 
 private:
     cocos2d::Sprite* background_sprite_ = cocos2d::Sprite::create("GameOverBackground.png");
@@ -25,8 +23,11 @@ private:
 
     inline static int current_progress_ = 0;
     inline static int level_status_ = 0;
-    void checkIfLevelCompleted();
 
+    void checkIfLevelCompleted();
+    void restartGame(Ref* pSender);
+    void goToMenuScene(Ref* pSender);
+    void goToNextLevel(Ref* pSender);
 };
 
 #endif // __MENU_SCENE_H__

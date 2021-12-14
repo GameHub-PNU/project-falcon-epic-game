@@ -18,7 +18,7 @@ private:
     cocos2d::ui::Button* department_button_ = cocos2d::ui::Button::create("KNIS_Logo.png");
     cocos2d::ui::Button* gameHub_button_ = cocos2d::ui::Button::create("GameHub_Logo.png");
 
-    cocos2d::Label* game_name_ = cocos2d::Label::createWithSystemFont("The Plane\nWhy I'm not falcon\nwhy I'm not flying", "Arial Black", 60,
+    cocos2d::Label* game_name_ = cocos2d::Label::createWithSystemFont("The Plane:\nWhy I'm not falcon\nwhy I'm not flying", "Arial Black", 60,
         cocos2d::Size::ZERO, cocos2d::TextHAlignment::CENTER);
     int sound_id_;
     cocos2d::Animation* background_animation_ = cocos2d::Animation::create();

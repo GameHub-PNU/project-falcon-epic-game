@@ -1,7 +1,9 @@
 #ifndef __CHOOSE_LEVEL_GAME_SCENE__
 #define __CHOOSE_LEVEL_GAME_SCENE__
 
+#include <vector>
 #include "cocos2d.h"
+#include "ui/UISlider.h"
 
 class ChooseLevelGameScene : public cocos2d::Scene
 {
@@ -15,9 +17,15 @@ public:
 private:
     cocos2d::Sprite* background_sprite_ = cocos2d::Sprite::create("choose-level-background.png");
 
-    void goToFirstLevelGameScene(Ref* pSender);
-    void goToSecondLevelGameScene(Ref* pSender);
-    void goToThirdLevelGameScene(Ref* pSender);
+    std::vector<cocos2d::ui::Slider*> level_progresses_;
+    std::vector<cocos2d::Label*> percentages_ = { cocos2d::Label::createWithSystemFont("0%", "Arial", 19),
+    	cocos2d::Label::createWithSystemFont("0%", "Arial", 19), cocos2d::Label::createWithSystemFont("0%", "Arial", 19) };
+    
+    void getUserRecords();
+
+    void goToFirstLevelGameScene(Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+    void goToSecondLevelGameScene(Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+    void goToThirdLevelGameScene(Ref* sender, cocos2d::ui::Widget::TouchEventType type);
     void goToMenuScene(Ref* pSender);
 };
 

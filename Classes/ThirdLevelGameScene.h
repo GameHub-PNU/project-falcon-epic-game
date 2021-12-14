@@ -39,7 +39,7 @@ private:
 
     std::vector<cocos2d::Sprite*> clouds_;
     cocos2d::FiniteTimeAction* plane_crush_ = nullptr;
-    cocos2d::FiniteTimeAction* smoke_animation_;
+    cocos2d::FiniteTimeAction* smoke_animation_ = nullptr;
 
     void addPlaneAnimation();
 

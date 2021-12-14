@@ -21,12 +21,15 @@ void ThirdLevelGameScene::addPlaneAnimation()
 {
 	auto animation = Animation::create();
 	auto smoke_animation = Animation::create();
-	animation->addSpriteFrameWithFile("ThirdBackgroundAnimation/PlaneCrush1.png");
+	for (int i = 1; i <= 6; ++i)
+	{
+		animation->addSpriteFrameWithFile(StringUtils::format("ThirdBackgroundAnimation/PlaneCrush%d.png", i));
+	}
+	/*animation->addSpriteFrameWithFile("ThirdBackgroundAnimation/PlaneCrush1.png");
 	animation->addSpriteFrameWithFile("ThirdBackgroundAnimation/PlaneCrush2.png");
 	animation->addSpriteFrameWithFile("ThirdBackgroundAnimation/PlaneCrush3.png");
 	animation->addSpriteFrameWithFile("ThirdBackgroundAnimation/PlaneCrush4.png");
-	animation->addSpriteFrameWithFile("ThirdBackgroundAnimation/PlaneCrush5.png");
-	//animation->addSpriteFrameWithFile("ThirdBackgroundAnimation/PlaneCrush6.png");
+	animation->addSpriteFrameWithFile("ThirdBackgroundAnimation/PlaneCrush5.png");*/
 
 	for (int i = 1; i <= 10; i++) {
 		std::string name = StringUtils::format("ThirdAn/Smoke_%003d.png", i);
@@ -194,7 +197,7 @@ void ThirdLevelGameScene::goToPauseScene(Ref* pSender)
 void ThirdLevelGameScene::goToGameOverScene(Ref* pSender)
 {
 	auto scene = GameOverScene::createScene(current_percent_, 3);
-	Director::getInstance()->replaceScene(scene);
+	Director::getInstance()->replaceScene(TransitionFade::create(0.5f, scene));
 }
 
 void ThirdLevelGameScene::onMouseDown(EventMouse* event)
@@ -236,7 +239,7 @@ bool ThirdLevelGameScene::onCollision(PhysicsContact& contact)
 		{
 			is_game_started_ = false;
 			physics_plane_->setGravityEnable(false);
-			plane_sprite_->runAction(Sequence::create(plane_crush_, smoke_animation_, DelayTime::create(0.5f),
+			plane_sprite_->runAction(Sequence::create(plane_crush_, DelayTime::create(0.5f), 
 				CallFuncN::create(CC_CALLBACK_1(ThirdLevelGameScene::goToGameOverScene, this)), nullptr));
 
 			return false;
@@ -251,13 +254,7 @@ bool ThirdLevelGameScene::onCollision(PhysicsContact& contact)
 		{
 			is_game_started_ = false;
 			physics_plane_->setGravityEnable(false);
-			auto animation = Animation::create();
-			animation->addSpriteFrameWithFile("ThirdBackgroundAnimation/PlaneCrush6.png");
-			animation->setDelayPerUnit(0.1f);
-			animation->setLoops(1);
-			auto disappear = Animate::create(animation);
-			disappear->retain();
-			plane_sprite_->runAction(Sequence::create(plane_crush_, disappear, DelayTime::create(0.5f),
+			plane_sprite_->runAction(Sequence::create(plane_crush_, DelayTime::create(0.5f),
 				CallFuncN::create(CC_CALLBACK_1(ThirdLevelGameScene::goToGameOverScene, this)), nullptr));
 
 			return true;

@@ -8,7 +8,7 @@
 #include "ThirdLevelGameScene.h"
 
 #include "MenuScene.h"
-
+#include <fstream>
 USING_NS_CC;
 
 Scene* GameOverScene::createScene()
@@ -47,6 +47,18 @@ void GameOverScene::checkIfLevelCompleted()
 		round_status_->setString("You lose!");
 		experimental::AudioEngine::play2d("YouLoseSong.mp3", true, SettingsHandler::getSoundVolume());
 	}
+
+	if (SettingsHandler::getMaxProgress().at(level_status_ - 1) < current_progress_)
+	{
+		SettingsHandler::getMaxProgress().at(level_status_ - 1) = current_progress_;
+		std::ofstream update_records("Backup/records.txt");
+		
+		for (const int i : SettingsHandler::getMaxProgress())
+		{
+			update_records << i << '\n';
+		}
+		update_records.close();
+	}
 }
 
 // on "init" you need to initialize your instance
@@ -70,10 +82,25 @@ bool GameOverScene::init()
 	auto nextLevelItem = MenuItemImage::create("NEXTLEVEL.png", "NEXTLEVEL.png", CC_CALLBACK_1(GameOverScene::goToNextLevel, this));
 	nextLevelItem->setScale(0.6f);
 
-	Menu* MenuItems = nullptr;
+	Menu* MenuItems;
 
 	if (current_progress_ == 100)
 	{
+		auto right_confetti = ParticleFireworks::create();
+		right_confetti->retain();
+		right_confetti->setRotation(45);
+		background_sprite_->addChild(right_confetti);
+		const char s_stars1[] = "stars.png";
+		right_confetti->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+		right_confetti->setScale(1.5f);
+		right_confetti->setPosition(0.0f, 0.0f);
+		auto left_confetti = ParticleFireworks::create();
+		left_confetti->retain();
+		background_sprite_->addChild(left_confetti);
+		left_confetti->setRotation(-45);
+		left_confetti->setScale(1.5f);
+		left_confetti->setTexture(Director::getInstance()->getTextureCache()->addImage(s_stars1));
+		left_confetti->setPosition(Director::getInstance()->getWinSize().width, 0.0f);
 		if (level_status_ != 3)
 		{
 			MenuItems = Menu::create(nextLevelItem, restartMenuItem, exitMenuItem, NULL);
@@ -86,6 +113,10 @@ bool GameOverScene::init()
 	else 
 	{
 		MenuItems = Menu::create(restartMenuItem, exitMenuItem, NULL);
+		Label* score_result = Label::createWithSystemFont(StringUtils::format("Your progress: %d%%", current_progress_), "Arial Black", 40);
+		score_result->setPosition(Director::getInstance()->getWinSize().width / 2.0f, 1.55f * MenuItems->getPosition().y);
+		score_result->enableShadow(Color4B::BLACK, Size(5, -5), 2);
+		this->addChild(score_result);
 	}
 	MenuItems->alignItemsVerticallyWithPadding(35);
 	this->addChild(MenuItems);
