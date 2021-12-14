@@ -20,30 +20,15 @@ Scene* ThirdLevelGameScene::createScene()
 void ThirdLevelGameScene::addPlaneAnimation()
 {
 	auto animation = Animation::create();
-	auto smoke_animation = Animation::create();
 	for (int i = 1; i <= 6; ++i)
 	{
 		animation->addSpriteFrameWithFile(StringUtils::format("ThirdBackgroundAnimation/PlaneCrush%d.png", i));
 	}
-	/*animation->addSpriteFrameWithFile("ThirdBackgroundAnimation/PlaneCrush1.png");
-	animation->addSpriteFrameWithFile("ThirdBackgroundAnimation/PlaneCrush2.png");
-	animation->addSpriteFrameWithFile("ThirdBackgroundAnimation/PlaneCrush3.png");
-	animation->addSpriteFrameWithFile("ThirdBackgroundAnimation/PlaneCrush4.png");
-	animation->addSpriteFrameWithFile("ThirdBackgroundAnimation/PlaneCrush5.png");*/
-
-	for (int i = 1; i <= 10; i++) {
-		std::string name = StringUtils::format("ThirdAn/Smoke_%003d.png", i);
-		smoke_animation->addSpriteFrameWithFile(name);
-	}
 
 	animation->setDelayPerUnit(0.5f);
-	smoke_animation->setDelayPerUnit(0.02f);
 	animation->setLoops(1);
-	smoke_animation->setLoops(1);
 	plane_crush_ = Animate::create(animation);
-	smoke_animation_ = Animate::create(smoke_animation);
 	plane_crush_->retain();
-	smoke_animation_->retain();
 }
 
 void ThirdLevelGameScene::initPlanePhysicsBody()
@@ -239,9 +224,7 @@ bool ThirdLevelGameScene::onCollision(PhysicsContact& contact)
 		{
 			is_game_started_ = false;
 			physics_plane_->setGravityEnable(false);
-			plane_sprite_->runAction(Sequence::create(plane_crush_, DelayTime::create(0.5f), 
-				CallFuncN::create(CC_CALLBACK_1(ThirdLevelGameScene::goToGameOverScene, this)), nullptr));
-
+			plane_sprite_->runAction(Sequence::create(plane_crush_, CallFuncN::create(CC_CALLBACK_1(ThirdLevelGameScene::goToGameOverScene, this)), nullptr));
 			return false;
 		}
 		if (((1 == bodyA->getCollisionBitmask()) && (3 == bodyB->getCollisionBitmask())) || ((3 == bodyA->getCollisionBitmask()) && (1 == bodyB->getCollisionBitmask())))
@@ -254,9 +237,7 @@ bool ThirdLevelGameScene::onCollision(PhysicsContact& contact)
 		{
 			is_game_started_ = false;
 			physics_plane_->setGravityEnable(false);
-			plane_sprite_->runAction(Sequence::create(plane_crush_, DelayTime::create(0.5f),
-				CallFuncN::create(CC_CALLBACK_1(ThirdLevelGameScene::goToGameOverScene, this)), nullptr));
-
+			plane_sprite_->runAction(Sequence::create(plane_crush_, CallFuncN::create(CC_CALLBACK_1(ThirdLevelGameScene::goToGameOverScene, this)), nullptr));
 			return true;
 		}
 	}
